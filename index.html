@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated SignIn Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* Login Container */
+        .login-container {
+            position: relative;
+            z-index: 10;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            max-width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            color: #ff0000;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff0000;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: #666;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 25px;
+        }
+
+        .forgot-password a {
+            color: #aaa;
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #ff0000;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff0000;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .login-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .login-btn:hover {
+            background: #cc0000;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider span {
+            padding: 0 15px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .signup-link a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #ff3333;
+            text-decoration: underline;
+        }
+
+        /* Social Login Buttons */
+        .social-login {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 30px;
+            }
+
+            .login-header h1 {
+                font-size: 28px;
+            }
+        }
+
+        /* Loading Animation */
+        .login-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .login-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="grid-overlay" id="gridOverlay"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-header">
+            <h1>SIGN IN</h1>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="thecodingwizard" 
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="••••••••" 
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <div class="forgot-password">
+                <a href="#forgot">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <div class="social-login">
+            <button class="social-btn" onclick="handleSocialLogin('google')">
+                <span>🔍</span> Google
+            </button>
+            <button class="social-btn" onclick="handleSocialLogin('github')">
+                <span>💻</span> GitHub
+            </button>
+        </div>
+
+        <div class="signup-link">
+            Don't have an account? <a href="#signup">Sign Up</a>
+        </div>
+    </div>
+
+    <script>
+        // Create canvas for interactive grid
+        const gridOverlay = document.getElementById('gridOverlay');
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        gridOverlay.appendChild(canvas);
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Grid settings
+        const gridSize = 50;
+        const glowSquares = new Map(); // Store glowing squares with their intensity
+
+        // Track mouse position
+        let mouseX = -100;
+        let mouseY = -100;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Calculate which grid square the mouse is over
+            const gridX = Math.floor(mouseX / gridSize);
+            const gridY = Math.floor(mouseY / gridSize);
+            const key = `${gridX},${gridY}`;
+
+            // Add or update the glow square
+            glowSquares.set(key, {
+                x: gridX,
+                y: gridY,
+                intensity: 1,
+                time: Date.now()
+            });
+        });
+
+        // Animation loop
+        function animate() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw base grid
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.1)';
+            ctx.lineWidth = 1;
+
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Draw and update glowing squares
+            const now = Date.now();
+            glowSquares.forEach((square, key) => {
+                const age = now - square.time;
+                const fadeTime = 800; // Fade out over 800ms
+                
+                // Calculate intensity (fade out over time)
+                square.intensity = Math.max(0, 1 - (age / fadeTime));
+
+                if (square.intensity > 0) {
+                    const x = square.x * gridSize;
+                    const y = square.y * gridSize;
+
+                    // Draw glowing square
+                    const gradient = ctx.createRadialGradient(
+                        x + gridSize / 2, 
+                        y + gridSize / 2, 
+                        0,
+                        x + gridSize / 2, 
+                        y + gridSize / 2, 
+                        gridSize * 1.5
+                    );
+                    
+                    gradient.addColorStop(0, `rgba(255, 0, 0, ${0.6 * square.intensity})`);
+                    gradient.addColorStop(0.5, `rgba(255, 0, 0, ${0.3 * square.intensity})`);
+                    gradient.addColorStop(1, `rgba(255, 0, 0, 0)`);
+
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x - gridSize, y - gridSize, gridSize * 3, gridSize * 3);
+
+                    // Draw bright square border
+                    ctx.strokeStyle = `rgba(255, 0, 0, ${square.intensity})`;
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, gridSize, gridSize);
+
+                    // Optional: Add inner glow
+                    ctx.fillStyle = `rgba(255, 0, 0, ${0.2 * square.intensity})`;
+                    ctx.fillRect(x, y, gridSize, gridSize);
+                } else {
+                    // Remove faded squares
+                    glowSquares.delete(key);
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Form submission handler
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.querySelector('.login-btn');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Add loading state
+            loginBtn.classList.add('loading');
+            loginBtn.textContent = '';
+
+            // Simulate login process
+            setTimeout(() => {
+                loginBtn.classList.remove('loading');
+                loginBtn.textContent = 'Login';
+                
+                // Show success message
+                alert(`Welcome back, ${username}!`);
+                
+                // Here you would typically send the credentials to your server
+                console.log('Login attempt:', { username, password: '***' });
+            }, 2000);
+        });
+
+        // Social login handler
+        function handleSocialLogin(provider) {
+            console.log(`Logging in with ${provider}`);
+            alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login clicked!`);
+            // Implement your social login logic here
+        }
+
+        // Add input focus animation
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateX(5px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateX(0)';
+            });
+        });
+
+        // Password visibility toggle (optional enhancement)
+        const passwordInput = document.getElementById('password');
+        passwordInput.addEventListener('dblclick', function() {
+            if (this.type === 'password') {
+                this.type = 'text';
+                setTimeout(() => {
+                    this.type = 'password';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>
